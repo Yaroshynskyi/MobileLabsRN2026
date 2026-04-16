@@ -1,23 +1,39 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { useRoute } from '@react-navigation/native';
 
 export default function Header({ navigation }: any) {
+  const route = useRoute();
+  const currentRouteName = route.name;
+
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
-        <Image source={require('../../assets/logoUni.png')} style={styles.logo} resizeMode="contain"/>
+        <Image 
+          source={require('../../assets/logoUni.png')} 
+          style={styles.logo}
+          resizeMode="contain"
+        />
         <Text style={styles.appName}>FirstMobileApp</Text>
       </View>
       
       <View style={styles.navBar}>
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home')}>
-          <Text style={styles.navText}>Головна</Text>
+          <Text style={[styles.navText, currentRouteName === 'Home' && styles.activeNavText]}>
+            Головна
+          </Text>
         </TouchableOpacity>
+        
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Gallery')}>
-          <Text style={styles.navText}>Фотогалерея</Text>
+          <Text style={[styles.navText, currentRouteName === 'Gallery' && styles.activeNavText]}>
+            Фотогалерея
+          </Text>
         </TouchableOpacity>
+        
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Profile')}>
-          <Text style={styles.navText}>Профіль</Text>
+          <Text style={[styles.navText, currentRouteName === 'Profile' && styles.activeNavText]}>
+            Профіль
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -27,7 +43,7 @@ export default function Header({ navigation }: any) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
-    paddingTop: 40, 
+    paddingTop: 40,
   },
   topBar: {
     flexDirection: 'row',
@@ -39,22 +55,9 @@ const styles = StyleSheet.create({
   logo: {
     width: 150,
     height: 50,
-    marginRight: 15,
-  },
-  logoPlaceholder: {
-    width: 50,
-    height: 50,
-    backgroundColor: '#e0e0e0',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 15,
-  },
-  logoText: {
-    fontSize: 12,
-    fontWeight: 'bold',
   },
   appName: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   navBar: {
@@ -65,11 +68,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
   },
-  navButton: {
-    padding: 5,
+  navButton: { padding: 5 },
+  navText: { 
+    fontSize: 16, 
+    color: '#888' 
   },
-  navText: {
-    fontSize: 16,
-    color: '#007BFF',
+  activeNavText: { 
+    color: '#007BFF'
   }
 });

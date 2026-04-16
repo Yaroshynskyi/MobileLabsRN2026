@@ -15,17 +15,8 @@ export default function GalleryScreen({ navigation }: any) {
   return (
     <View style={styles.container}>
       <Header navigation={navigation} />
-      
-      <FlatList
-        data={galleryData}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        numColumns={2} 
-        columnWrapperStyle={styles.row} 
-        contentContainerStyle={styles.listContent}
-      />
-      
-      <Footer />
+      <FlatList data={galleryData} renderItem={renderItem} keyExtractor={item => item.id} numColumns={2}  columnWrapperStyle={styles.row}  contentContainerStyle={styles.listContent}/>
+      <Footer/>
     </View>
   );
 }
