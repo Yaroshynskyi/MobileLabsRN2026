@@ -1,4 +1,4 @@
-import { Link } from 'expo-router';
+import { Link, Stack } from 'expo-router';
 import { Button, FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { PRODUCTS } from '../../data/products';
@@ -20,6 +20,7 @@ export default function CatalogScreen() {
 
   return (
     <View style={styles.container}>
+      <Stack.Screen options={{ headerShown: false }} />
       <Text style={styles.header}>Каталог товарів</Text>
       
       <FlatList
