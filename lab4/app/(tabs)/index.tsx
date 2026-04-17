@@ -9,22 +9,25 @@ export default function App() {
   const [currentDir, setCurrentDir] = useState<Directory>(rootDir);
   const [items, setItems] = useState<(Directory | File)[]>([]);
 
-  // Стани для створення
   const [modalVisible, setModalVisible] = useState(false);
   const [creationType, setCreationType] = useState<'folder' | 'file'>('folder');
   const [newItemName, setNewItemName] = useState('');
   const [newItemContent, setNewItemContent] = useState('');
 
-  // Стани для читання/редагування файлу
   const [viewModalVisible, setViewModalVisible] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileContent, setFileContent] = useState('');
   const [fileInfo, setFileInfo] = useState<any>(null);
 
+  // Завдання 7
+  const totalSpaceGB = (Paths.totalDiskSpace / (1024 ** 3)).toFixed(2);
+  const freeSpaceGB = (Paths.availableDiskSpace / (1024 ** 3)).toFixed(2);
+  const usedSpaceGB = ((Paths.totalDiskSpace - Paths.availableDiskSpace) / (1024 ** 3)).toFixed(2);
+
   const loadDirectoryContents = async (dir: Directory) => {
     try {
       const createRes = dir.create({ intermediates: true, idempotent: true });
-      if ((createRes as any) instanceof Promise) await createRes;
+      if ((createRes as any) instanceof Promise || await Promise.resolve(createRes) === createRes) await createRes;
 
       const dirItems = await dir.list();
       
@@ -44,24 +47,47 @@ export default function App() {
     loadDirectoryContents(currentDir);
   }, [currentDir]);
 
-  // Обробка натискання на елемент
   const handlePressItem = async (item: Directory | File) => {
     if (item instanceof Directory) {
-      setCurrentDir(item); // Перехід у папку
+      setCurrentDir(item); 
     } else if (item instanceof File) {
-      // Зчитування файлу
       try {
         const content = await item.text();
-        const info = await item.info(); // Отримання метаданих файлу
+        const info = await item.info(); 
         
         setSelectedFile(item);
         setFileContent(content);
         setFileInfo(info);
-        setViewModalVisible(true); // Відкриваємо вікно редагування
+        setViewModalVisible(true); 
       } catch (error: any) {
         Alert.alert("Помилка", "Не вдалося відкрити файл: " + error.message);
       }
     }
+  };
+
+  // Завдання 5
+  const handleLongPressItem = (item: Directory | File) => {
+    Alert.alert(
+      "Видалення",
+      `Ви впевнені, що хочете видалити "${item.name}"?`,
+      [
+        { text: "Скасувати", style: "cancel" },
+        { 
+          text: "Видалити", 
+          style: "destructive", 
+          onPress: async () => {
+            try {
+              const res = item.delete();
+              if ((res as any) instanceof Promise || await Promise.resolve(res) === res) await res;
+              
+              await loadDirectoryContents(currentDir);
+            } catch (error: any) {
+              Alert.alert("Помилка видалення", error.message);
+            }
+          }
+        }
+      ]
+    );
   };
 
   const handleGoUp = () => {
@@ -87,12 +113,12 @@ export default function App() {
       if (creationType === 'folder') {
         const newDir = new Directory(currentDir, newItemName.trim());
         const res = newDir.create({ intermediates: true, idempotent: true });
-        if ((res as any) instanceof Promise) await res;
+        if ((res as any) instanceof Promise || await Promise.resolve(res) === res) await res;
       } else {
         const fileName = newItemName.trim().endsWith('.txt') ? newItemName.trim() : `${newItemName.trim()}.txt`;
         const newFile = new File(currentDir, fileName);
         const res = newFile.write(newItemContent || ' ');
-        if ((res as any) instanceof Promise) await res;
+        if ((res as any) instanceof Promise || await Promise.resolve(res) === res) await res;
       }
       
       setModalVisible(false);
@@ -102,16 +128,15 @@ export default function App() {
     }
   };
 
-  // Збереження змін у файлі
   const handleSaveEdit = async () => {
     if (selectedFile) {
       try {
         const res = selectedFile.write(fileContent);
-        if ((res as any) instanceof Promise) await res;
+        if ((res as any) instanceof Promise || await Promise.resolve(res) === res) await res;
         
         Alert.alert("Успіх", "Зміни збережено!");
         setViewModalVisible(false);
-        await loadDirectoryContents(currentDir); // Оновлюємо список, щоб оновилась дата модифікації
+        await loadDirectoryContents(currentDir); 
       } catch (error: any) {
         Alert.alert("Помилка збереження", error.message);
       }
@@ -124,6 +149,7 @@ export default function App() {
       <TouchableOpacity 
         style={[styles.itemContainer, isFolder ? styles.folderItem : styles.fileItem]} 
         onPress={() => handlePressItem(item)}
+        onLongPress={() => handleLongPressItem(item)} 
       >
         <Text style={styles.itemIcon}>{isFolder ? '📁' : '📄'}</Text>
         <Text style={styles.itemName}>{item.name}</Text>
@@ -133,6 +159,11 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.statsContainer}>
+        <Text style={styles.statsText}>Пам'ять пристрою: {totalSpaceGB} ГБ всього</Text>
+        <Text style={styles.statsText}>Зайнято: {usedSpaceGB} ГБ | Вільно: {freeSpaceGB} ГБ</Text>
+      </View>
+
       <View style={styles.header}>
         <Text style={styles.breadcrumb} numberOfLines={1}>
           Шлях: /{Paths.relative(rootDir.uri, currentDir.uri) || 'Головна'}
@@ -164,7 +195,6 @@ export default function App() {
         ListEmptyComponent={<Text style={styles.emptyText}>Папка порожня</Text>}
       />
 
-      {/* Модалка створення */}
       <Modal visible={modalVisible} transparent={true} animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
@@ -197,13 +227,11 @@ export default function App() {
         </View>
       </Modal>
 
-      {/* Модалка читання/редагування */}
       <Modal visible={viewModalVisible} transparent={true} animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Редагування файлу</Text>
             
-            {/* Блок з інформацією про файл (Завдання 6) */}
             {fileInfo && selectedFile && (
               <View style={styles.infoBox}>
                 <Text style={styles.infoText}>Назва: {selectedFile.name}</Text>
@@ -235,6 +263,8 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f5f5f5' },
+  statsContainer: { backgroundColor: '#343a40', padding: 12, alignItems: 'center' },
+  statsText: { color: '#fff', fontSize: 13, fontWeight: '500', marginVertical: 2 },
   header: { padding: 15, backgroundColor: '#fff', borderBottomWidth: 1, borderBottomColor: '#ddd' },
   breadcrumb: { fontSize: 16, fontWeight: 'bold', color: '#333' },
   controls: { flexDirection: 'row', padding: 10, backgroundColor: '#fff', gap: 10, marginBottom: 5 },
@@ -248,15 +278,12 @@ const styles = StyleSheet.create({
   itemIcon: { fontSize: 24, marginRight: 15 },
   itemName: { fontSize: 16, color: '#333' },
   emptyText: { textAlign: 'center', marginTop: 20, color: '#888', fontSize: 16 },
-  
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' },
   modalContent: { width: '90%', backgroundColor: '#fff', padding: 20, borderRadius: 10, elevation: 5 },
   modalTitle: { fontSize: 18, fontWeight: 'bold', marginBottom: 15, textAlign: 'center' },
   input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 5, padding: 10, marginBottom: 15, fontSize: 16 },
   textArea: { height: 100, textAlignVertical: 'top' },
   modalButtons: { flexDirection: 'row', justifyContent: 'space-around' },
-  
-  // Стилі для блоку інформації
   infoBox: { backgroundColor: '#e9ecef', padding: 10, borderRadius: 5, marginBottom: 15 },
   infoText: { fontSize: 12, color: '#495057', marginBottom: 3 }
 });
