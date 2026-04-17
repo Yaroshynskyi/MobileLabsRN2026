@@ -29,9 +29,9 @@
 * **Обробка помилок:** Реалізовано екран `+not-found.jsx` для перехоплення неіснуючих маршрутів.
 
 ## Скріншоти роботи застосунку
-| Головний екран | Створення папки | У середині створеної папки | Створення файлу | У середині створеного файлу | Повідомлення про успішне редагування файлу | У середині відредагованого файлу | Видалення файлу |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| ![Home](./screenshots/home.png) | ![CreateFolder](./screenshots/foldercreate.png) | ![InsideFolder](./screenshots/infolder.png) | ![CreateFile](./screenshots/CreateFile.png) | ![InsideFile](./screenshots/InsideFile.png) | ![RedactSuccess](./screenshots/RedactSuccess.png) | ![InsideRedFile](./screenshots/InsideRedFile.png) | ![DeleteFile](./screenshots/DeleteFile.png) |
+| Екран каталогу | Екран товару | Екран логіну | Екран реєстрації | Екран 404 |
+| :--- | :--- | :--- | :--- | :--- |
+| ![Home](./screenshots/home.png) | ![Product](./screenshots/product.png) | ![Login](./screenshots/login.png) | ![Reg](./screenshots/reg.png) | ![404](./screenshots/404.png) |
 
 ## Висновки (Відповіді на контрольні запитання)
 
