@@ -1,15 +1,10 @@
-import { Text, View } from "react-native";
+import { Slot } from 'expo-router';
+import { AuthProvider } from '../context/AuthContext';
 
-export default function Index() {
+export default function RootLayout() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-    </View>
+    <AuthProvider>
+      <Slot />
+    </AuthProvider>
   );
 }
