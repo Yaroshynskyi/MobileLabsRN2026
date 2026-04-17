@@ -9,7 +9,7 @@
 2. Клонуйте репозиторій та перейдіть у папку проекту:
    ```bash
    git clone https://github.com/Yaroshynskyi/MobileLabsRN2026.git
-   cd lab3
+   cd lab4
 3. Встановіть необхідні залежності:
     ```bash
     npm install
