@@ -1,50 +1,40 @@
-# Welcome to your Expo app 👋
+# Лабораторна робота №6: Dвторизації та збереження персональних даних (Firebase, Firestore)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**Виконав:** Ярошинський Станіслав, студент групи ІПЗ-22-2  
+**Дисципліна:** Розробка мобільних додатків
 
-## Get started
+## Інструкція із запуску
 
-1. Install dependencies
-
+1. Переконайтеся, що у вас встановлено Node.js.
+2. Клонуйте репозиторій та перейдіть у папку проекту:
    ```bash
-   npm install
-   ```
+   git clone https://github.com/Yaroshynskyi/MobileLabsRN2026.git
+   cd lab6
+3. Встановіть необхідні залежності:
+    ```bash
+    npm install
+4. Запустіть сервер Expo:
+    ```bash
+    npx expo start
+5. Відсканувати QR-код через додаток Expo Go (Android) або камеру (iOS).
 
-2. Start the app
+## Опис реалізованого функціоналу
 
-   ```bash
-   npx expo start
-   ```
+- **Авторизація:** Реалізовано вхід, реєстрацію (з підтвердженням email) та скидання пароля через Firebase Auth.
+- **Збереження даних:** Авторизований користувач може зберігати та редагувати свій профіль (ім'я, вік, місто) у Firestore.
+- **Безпека:** Доступ до екранів захищено через Expo Router (групи `auth` та `app`). База даних захищена Firestore Security Rules (доступ лише до власного документа).
+- **Видалення акаунту:** Реалізовано можливість повного видалення профілю з бази даних та облікового запису з повторною автентифікацією.
 
-In the output, you'll find options to open the app in a
+## Скріншоти роботи застосунку
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+| Логін | Реєстрація | Підтвердження реєстрації | Повідомлення після під. пошти | Профіль |
+| :--- | :--- | :--- | :--- | :--- |
+| ![Login](./screenshots/login.png) | ![Reg](./screenshots/reg.png) | ![RegConf](./screenshots/regconfreq.png) | ![RegConfMsg](./screenshots/regconf.png) | ![profile](./screenshots/profile.png) |
+| :--- | :--- | :--- | :--- | :--- |
+| Повідомлення про зміни профіля | Видалення | Відновлення паролю | Форма зміни паролю | |
+| :--- | :--- | :--- | :--- | :--- |
+| ![ProfileChange](./screenshots/profileconf.png) | ![Delete](./screenshots/accdelete.png) | ![PasswordReset](./screenshots/passres.png) | ![PasswordResetForm](./screenshots/passresreq.png) | |
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Висновки
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Під час виконання лабораторної роботи було набуто практичних навичок інтеграції Firebase у мобільний застосунок на React Native. Було налаштовано систему авторизації, маршрутизацію для публічних та захищених екранів, а також реалізовано CRUD-операції з хмарною базою даних Firestore із забезпеченням правил безпеки.
