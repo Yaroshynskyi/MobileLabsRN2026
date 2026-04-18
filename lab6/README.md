@@ -30,9 +30,7 @@
 | Логін | Реєстрація | Підтвердження реєстрації | Повідомлення після під. пошти | Профіль |
 | :--- | :--- | :--- | :--- | :--- |
 | ![Login](./screenshots/login.png) | ![Reg](./screenshots/reg.png) | ![RegConf](./screenshots/regconfreq.png) | ![RegConfMsg](./screenshots/regconf.png) | ![profile](./screenshots/profile.png) |
-| :--- | :--- | :--- | :--- | :--- |
 | Повідомлення про зміни профіля | Видалення | Відновлення паролю | Форма зміни паролю | |
-| :--- | :--- | :--- | :--- | :--- |
 | ![ProfileChange](./screenshots/profileconf.png) | ![Delete](./screenshots/accdelete.png) | ![PasswordReset](./screenshots/passres.png) | ![PasswordResetForm](./screenshots/passresreq.png) | |
 
 ## Висновки
